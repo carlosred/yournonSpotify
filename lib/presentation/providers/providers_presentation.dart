@@ -1,3 +1,6 @@
 import 'package:riverpod/riverpod.dart';
+import 'package:yournonspotify/domain/models/item.dart';
 
-var typesProvider = StateProvider<List<String>>((ref) => []);
+final typesProvider = StateProvider<List<String>>((ref) => []);
+
+final favoritesProvider = StateProvider<List<Items>>((ref) => []);

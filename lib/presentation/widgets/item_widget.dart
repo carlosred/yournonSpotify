@@ -1,10 +1,17 @@
+// ignore_for_file: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:yournonspotify/domain/models/item.dart';
 
-class ItemWidget extends StatefulWidget {
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'package:yournonspotify/domain/models/item.dart';
+import 'package:yournonspotify/presentation/providers/providers_presentation.dart';
+
+class ItemWidget extends ConsumerStatefulWidget {
   const ItemWidget({
     super.key,
+    required this.recommended,
     required this.item,
     required this.width,
     required this.height,
@@ -13,15 +20,21 @@ class ItemWidget extends StatefulWidget {
   final double width;
   final double height;
   final Items item;
+  final bool recommended;
 
   @override
-  State<ItemWidget> createState() => _ItemWidgetState();
+  ConsumerState<ItemWidget> createState() => _ItemWidgetState();
 }
 
-class _ItemWidgetState extends State<ItemWidget> {
+class _ItemWidgetState extends ConsumerState<ItemWidget>
+    with AutomaticKeepAliveClientMixin {
   late String _imageUrl;
   late String _title;
   late String _subtitle;
+  var _selected = false;
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
@@ -51,8 +64,30 @@ class _ItemWidgetState extends State<ItemWidget> {
     }
   }
 
+  void _onFavoriteSelectedTap() {
+    setState(
+      () {
+        _selected = !_selected;
+
+        if (_selected == true) {
+          var favorites = ref.read(favoritesProvider);
+          favorites.add(
+            widget.item,
+          );
+
+          ref.read(favoritesProvider.notifier).state = favorites;
+        } else {
+          var favorites = ref.read(favoritesProvider);
+          favorites.removeWhere((element) => element == widget.item);
+          ref.read(favoritesProvider.notifier).state = favorites;
+        }
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return AspectRatio(
       aspectRatio: 60 / 10,
       child: Row(
@@ -95,7 +130,7 @@ class _ItemWidgetState extends State<ItemWidget> {
                   _title,
                   style: const TextStyle(
                       color: Colors.white,
-                      fontSize: 15.0,
+                      fontSize: 13.0,
                       fontWeight: FontWeight.w500),
                 ),
                 Text(
@@ -107,7 +142,37 @@ class _ItemWidgetState extends State<ItemWidget> {
                 ),
               ],
             ),
-          )
+          ),
+          Expanded(
+            flex: 3,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                widget.recommended == false
+                    ? GestureDetector(
+                        onTap: _onFavoriteSelectedTap,
+                        child: _selected
+                            ? const Icon(
+                                Icons.favorite,
+                                color: Colors.white,
+                              )
+                            : const Icon(
+                                Icons.favorite_border_sharp,
+                                color: Colors.white,
+                              ),
+                      )
+                    : const SizedBox(),
+                const Icon(
+                  Icons.play_arrow,
+                  color: Colors.white,
+                ),
+                const SizedBox(
+                  width: 5.0,
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );

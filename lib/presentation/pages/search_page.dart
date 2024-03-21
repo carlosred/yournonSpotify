@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yournonspotify/presentation/controllers/search_bar_controller.dart';
 import 'package:yournonspotify/presentation/providers/providers_presentation.dart';
+import 'package:yournonspotify/presentation/widgets/floating_recommendations_button.dart';
 
 import '../widgets/item_widget.dart';
 import '../widgets/type_widget.dart';
@@ -15,9 +16,9 @@ class SearchBarPage extends ConsumerStatefulWidget {
 }
 
 class _SearchBarPageState extends ConsumerState<SearchBarPage> {
-  var _searchBarhController = TextEditingController();
+  final _searchBarhController = TextEditingController();
 
-  List<String> _types = ['track', 'album', 'artist'];
+  final List<String> _types = ['track', 'album', 'artist'];
 
   Timer? _debounceTimer;
 
@@ -53,8 +54,11 @@ class _SearchBarPageState extends ConsumerState<SearchBarPage> {
     var height = MediaQuery.sizeOf(context).height;
 
     var searchbarProvider = ref.watch(searchBarControllerProvider);
+    ;
+
     return SafeArea(
       child: Scaffold(
+        floatingActionButton: const FloatingRecomendationsButton(),
         extendBodyBehindAppBar: true,
         body: Container(
           width: width,
@@ -88,17 +92,20 @@ class _SearchBarPageState extends ConsumerState<SearchBarPage> {
                             child: TextFormField(
                               controller: _searchBarhController,
                               onChanged: (value) => _onTypingFinished(value),
-                              onEditingComplete: () =>
-                                  _onTypingFinished(_searchBarhController.text),
+                              onEditingComplete: () {
+                                FocusScope.of(context).unfocus();
+                                _onTypingFinished(_searchBarhController.text);
+                              },
                               decoration: const InputDecoration.collapsed(
-                                  border: InputBorder.none,
-                                  fillColor: Colors.transparent,
-                                  hintText: 'what do you want to listen?',
-                                  hintStyle: TextStyle(
-                                    color: Colors.white54,
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w500,
-                                  )),
+                                border: InputBorder.none,
+                                fillColor: Colors.transparent,
+                                hintText: 'what do you want to listen?',
+                                hintStyle: TextStyle(
+                                  color: Colors.white54,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
                               style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 20,
@@ -133,9 +140,11 @@ class _SearchBarPageState extends ConsumerState<SearchBarPage> {
                   data: (data) {
                     if (data.isNotEmpty) {
                       return ListView.separated(
+                        addAutomaticKeepAlives: true,
                         physics: const BouncingScrollPhysics(),
                         itemCount: data.length,
                         itemBuilder: (context, index) => ItemWidget(
+                          recommended: false,
                           item: data[index],
                           height: height,
                           width: width,

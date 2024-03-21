@@ -21,10 +21,11 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         ref.read(authProvider.notifier).state = next.value;
 
         Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const SearchBarPage(),
-            ));
+          context,
+          MaterialPageRoute(
+            builder: (context) => const SearchBarPage(),
+          ),
+        );
       }
     });
 
@@ -85,13 +86,26 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                   .read(loginControllerProvider.notifier)
                                   .authenticate();
                             },
-                            child: const Text(
-                              'Log In',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w500,
-                              ),
+                            child: const Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.done,
+                                  color: Colors.white,
+                                  size: 20,
+                                ),
+                                SizedBox(
+                                  width: 10.0,
+                                ),
+                                Text(
+                                  'Login Sucessfully',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ),

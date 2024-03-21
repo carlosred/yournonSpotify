@@ -44,4 +44,29 @@ class SpotifyRepository {
     }
     return result;
   }
+
+  Future<List<Items>> getRecomendations({
+    required String accessToken,
+    required List<Items> seeds,
+  }) async {
+    List<Items> result;
+    try {
+      var seedArtists = seeds.map((e) => e.artists!.first.id).toList();
+      var seedTracks = seeds.map((e) => e.id).toList();
+
+      var response = await spotifyClient.getRecomendations(
+        accessToken: accessToken,
+        seedArtist: seedArtists,
+        seedTracks: seedTracks,
+      );
+      result =
+          List.from(response!['tracks']).map((e) => Items.fromJson(e)).toList();
+      print('recomendedd tracks: ' + result.length.toString());
+
+      for (var i in result) print(i.name);
+    } catch (e) {
+      result = [];
+    }
+    return result;
+  }
 }
