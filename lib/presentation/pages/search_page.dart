@@ -1,13 +1,11 @@
 import 'dart:async';
 
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yournonspotify/presentation/controllers/search_bar_controller.dart';
 import 'package:yournonspotify/presentation/providers/providers_presentation.dart';
 
+import '../widgets/item_widget.dart';
 import '../widgets/type_widget.dart';
 
 class SearchBarPage extends ConsumerStatefulWidget {
@@ -90,6 +88,8 @@ class _SearchBarPageState extends ConsumerState<SearchBarPage> {
                             child: TextFormField(
                               controller: _searchBarhController,
                               onChanged: (value) => _onTypingFinished(value),
+                              onEditingComplete: () =>
+                                  _onTypingFinished(_searchBarhController.text),
                               decoration: const InputDecoration.collapsed(
                                   border: InputBorder.none,
                                   fillColor: Colors.transparent,
@@ -124,75 +124,21 @@ class _SearchBarPageState extends ConsumerState<SearchBarPage> {
                   ],
                 ),
               ),
+              const SizedBox(
+                height: 1.0,
+              ),
               Expanded(
                 flex: 8,
                 child: searchbarProvider.when(
                   data: (data) {
-                    if (data != null && data.isNotEmpty) {
+                    if (data.isNotEmpty) {
                       return ListView.separated(
                         physics: const BouncingScrollPhysics(),
                         itemCount: data.length,
-                        itemBuilder: (context, index) => AspectRatio(
-                          aspectRatio: 60 / 10,
-                          child: Row(
-                            children: [
-                              const SizedBox(
-                                width: 10.0,
-                              ),
-                              Expanded(
-                                flex: 2,
-                                child: CachedNetworkImage(
-                                  fit: BoxFit.fill,
-                                  imageBuilder: (context, imageProvider) {
-                                    return Container(
-                                      width: width,
-                                      height: height,
-                                      decoration: BoxDecoration(
-                                        image: DecorationImage(
-                                          image: imageProvider,
-                                          fit: BoxFit.contain,
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                  imageUrl: data[index].album.images.first.url,
-                                  progressIndicatorBuilder:
-                                      (context, url, downloadProgress) =>
-                                          CircularProgressIndicator(
-                                              value: downloadProgress.progress),
-                                  errorWidget: (context, url, error) =>
-                                      const Icon(Icons.error),
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 10.0,
-                              ),
-                              Expanded(
-                                flex: 8,
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      data[index].name,
-                                      style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 15.0,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                    Text(
-                                      '${data[index].type} - ${data[index].artists.first.name}',
-                                      style: const TextStyle(
-                                          color: Colors.white60,
-                                          fontSize: 12.0,
-                                          fontWeight: FontWeight.normal),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
+                        itemBuilder: (context, index) => ItemWidget(
+                          item: data[index],
+                          height: height,
+                          width: width,
                         ),
                         separatorBuilder: (context, index) => const SizedBox(
                           height: 15.0,

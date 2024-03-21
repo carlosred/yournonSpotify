@@ -1,5 +1,7 @@
 import 'package:yournonspotify/data/clients/spotify_client.dart';
+import 'package:yournonspotify/domain/models/album.dart';
 import 'package:yournonspotify/domain/models/artist.dart';
+import 'package:yournonspotify/domain/models/item.dart';
 import 'package:yournonspotify/domain/models/track.dart';
 
 class SpotifyRepository {
@@ -9,36 +11,36 @@ class SpotifyRepository {
     required this.spotifyClient,
   });
 
-  Future<dynamic> searchTrack({
+  Future<List<Items>> searchTrack({
     required String accessToken,
     required String track,
-    List<String>? types,
+    required List<String> types,
   }) async {
-    dynamic result;
+    List<Items> result;
     try {
-      result = await spotifyClient.searchTrack(
+      var response = await spotifyClient.searchTrack(
         accessToken: accessToken,
         track: track,
         types: types,
       );
-      var key = result?.keys.first;
+      var key = response?.keys.first;
       switch (key) {
         case 'tracks':
-          result = Track.fromJson(result![key]);
+          result = Tracks.fromJson(response![key]).items;
           break;
 
         case 'albums':
-          result = Track.fromJson(result![key]);
+          result = Albums.fromJson(response![key]).items;
           break;
 
         case 'artists':
-          result = Artist.fromJson(result![key]);
+          result = Artists.fromJson(response![key]).items;
           break;
         default:
-          result = Track.fromJson(result![key]);
+          result = Tracks.fromJson(response![key]).items;
       }
     } catch (e) {
-      result = null;
+      result = [];
     }
     return result;
   }

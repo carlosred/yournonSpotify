@@ -7,12 +7,12 @@ class SpotifyClient extends BaseClient {
   Future<Map<String, dynamic>?> searchTrack({
     required String accessToken,
     required String track,
-    List<String>? types,
+    required List<String> types,
   }) async {
     Map<String, dynamic>? result;
     try {
       var url = Uri.https('api.spotify.com', '/v1/search',
-          {'q': track, 'type': types ?? 'track'});
+          {'q': track, 'type': (types.isNotEmpty ? types : 'track')});
 
       var response = await http.get(
         url,

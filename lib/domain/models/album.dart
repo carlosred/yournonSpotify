@@ -1,7 +1,9 @@
 import 'package:yournonspotify/domain/models/item.dart';
 
-class Artists {
-  Artists({
+import 'externalUrls.dart';
+
+class Albums {
+  Albums({
     required this.href,
     required this.items,
     required this.limit,
@@ -18,7 +20,7 @@ class Artists {
   late final Null previous;
   late final int total;
 
-  Artists.fromJson(Map<String, dynamic> json) {
+  Albums.fromJson(Map<String, dynamic> json) {
     href = json['href'];
     items = List.from(json['items']).map((e) => Items.fromJson(e)).toList();
     limit = json['limit'];
@@ -41,23 +43,39 @@ class Artists {
   }
 }
 
-class Followers {
-  Followers({
-    this.href,
-    required this.total,
+class Artist {
+  Artist({
+    required this.externalUrls,
+    required this.href,
+    required this.id,
+    required this.name,
+    required this.type,
+    required this.uri,
   });
-  late final Null href;
-  late final int total;
+  late final ExternalUrls externalUrls;
+  late final String href;
+  late final String id;
+  late final String name;
+  late final String type;
+  late final String uri;
 
-  Followers.fromJson(Map<String, dynamic> json) {
-    href = null;
-    total = json['total'];
+  Artist.fromJson(Map<String, dynamic> json) {
+    externalUrls = ExternalUrls.fromJson(json['external_urls']);
+    href = json['href'];
+    id = json['id'];
+    name = json['name'];
+    type = json['type'];
+    uri = json['uri'];
   }
 
   Map<String, dynamic> toJson() {
     final _data = <String, dynamic>{};
+    _data['external_urls'] = externalUrls.toJson();
     _data['href'] = href;
-    _data['total'] = total;
+    _data['id'] = id;
+    _data['name'] = name;
+    _data['type'] = type;
+    _data['uri'] = uri;
     return _data;
   }
 }

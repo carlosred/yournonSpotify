@@ -1,5 +1,9 @@
-class Track {
-  Track({
+import 'externalUrls.dart';
+import 'images.dart';
+import 'item.dart';
+
+class Tracks {
+  Tracks({
     required this.href,
     required this.items,
     required this.limit,
@@ -16,7 +20,7 @@ class Track {
   late final Null previous;
   late final int total;
 
-  Track.fromJson(Map<String, dynamic> json) {
+  Tracks.fromJson(Map<String, dynamic> json) {
     href = json['href'];
     items = List.from(json['items']).map((e) => Items.fromJson(e)).toList();
     limit = json['limit'];
@@ -39,89 +43,6 @@ class Track {
   }
 }
 
-class Items {
-  Items({
-    required this.album,
-    required this.artists,
-    required this.availableMarkets,
-    required this.discNumber,
-    required this.durationMs,
-    required this.explicit,
-    required this.externalIds,
-    required this.externalUrls,
-    required this.href,
-    required this.id,
-    required this.isLocal,
-    required this.name,
-    required this.popularity,
-    this.previewUrl,
-    required this.trackNumber,
-    required this.type,
-    required this.uri,
-  });
-  late final Album album;
-  late final List<Artists> artists;
-  late final List<String> availableMarkets;
-  late final int discNumber;
-  late final int durationMs;
-  late final bool explicit;
-  late final ExternalIds externalIds;
-  late final ExternalUrls externalUrls;
-  late final String href;
-  late final String id;
-  late final bool isLocal;
-  late final String name;
-  late final int popularity;
-  late final String? previewUrl;
-  late final int trackNumber;
-  late final String type;
-  late final String uri;
-
-  Items.fromJson(Map<String, dynamic> json) {
-    album = Album.fromJson(json['album']);
-    artists =
-        List.from(json['artists']).map((e) => Artists.fromJson(e)).toList();
-    availableMarkets =
-        List.castFrom<dynamic, String>(json['available_markets']);
-    discNumber = json['disc_number'];
-    durationMs = json['duration_ms'];
-    explicit = json['explicit'];
-    externalIds = ExternalIds.fromJson(json['external_ids']);
-    externalUrls = ExternalUrls.fromJson(json['external_urls']);
-    href = json['href'];
-    id = json['id'];
-    isLocal = json['is_local'];
-    name = json['name'];
-    popularity = json['popularity'];
-    previewUrl = null;
-    trackNumber = json['track_number'];
-    type = json['type'];
-    uri = json['uri'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final _data = <String, dynamic>{};
-    _data['album'] = album.toJson();
-    _data['artists'] = artists.map((e) => e.toJson()).toList();
-    _data['available_markets'] = availableMarkets;
-    _data['disc_number'] = discNumber;
-    _data['duration_ms'] = durationMs;
-    _data['explicit'] = explicit;
-    _data['external_ids'] = externalIds.toJson();
-    _data['external_urls'] = externalUrls.toJson();
-    _data['href'] = href;
-    _data['id'] = id;
-    _data['is_local'] = isLocal;
-    _data['name'] = name;
-    _data['popularity'] = popularity;
-    _data['preview_url'] = previewUrl;
-    _data['track_number'] = trackNumber;
-    _data['type'] = type;
-    _data['uri'] = uri;
-    return _data;
-  }
-}
-
 class Album {
   Album({
     required this.albumType,
@@ -139,7 +60,7 @@ class Album {
     required this.uri,
   });
   late final String albumType;
-  late final List<Artists> artists;
+  late final List<Artist> artists;
   late final List<String> availableMarkets;
   late final ExternalUrls externalUrls;
   late final String href;
@@ -155,7 +76,7 @@ class Album {
   Album.fromJson(Map<String, dynamic> json) {
     albumType = json['album_type'];
     artists =
-        List.from(json['artists']).map((e) => Artists.fromJson(e)).toList();
+        List.from(json['artists']).map((e) => Artist.fromJson(e)).toList();
     availableMarkets =
         List.castFrom<dynamic, String>(json['available_markets']);
     externalUrls = ExternalUrls.fromJson(json['external_urls']);
@@ -189,8 +110,8 @@ class Album {
   }
 }
 
-class Artists {
-  Artists({
+class Artist {
+  Artist({
     required this.externalUrls,
     required this.href,
     required this.id,
@@ -205,7 +126,7 @@ class Artists {
   late final String type;
   late final String uri;
 
-  Artists.fromJson(Map<String, dynamic> json) {
+  Artist.fromJson(Map<String, dynamic> json) {
     externalUrls = ExternalUrls.fromJson(json['external_urls']);
     href = json['href'];
     id = json['id'];
@@ -222,48 +143,6 @@ class Artists {
     _data['name'] = name;
     _data['type'] = type;
     _data['uri'] = uri;
-    return _data;
-  }
-}
-
-class ExternalUrls {
-  ExternalUrls({
-    required this.spotify,
-  });
-  late final String spotify;
-
-  ExternalUrls.fromJson(Map<String, dynamic> json) {
-    spotify = json['spotify'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final _data = <String, dynamic>{};
-    _data['spotify'] = spotify;
-    return _data;
-  }
-}
-
-class Images {
-  Images({
-    required this.height,
-    required this.url,
-    required this.width,
-  });
-  late final int height;
-  late final String url;
-  late final int width;
-
-  Images.fromJson(Map<String, dynamic> json) {
-    height = json['height'];
-    url = json['url'];
-    width = json['width'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final _data = <String, dynamic>{};
-    _data['height'] = height;
-    _data['url'] = url;
-    _data['width'] = width;
     return _data;
   }
 }
