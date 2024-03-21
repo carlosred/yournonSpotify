@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yournonspotify/data/providers/providers_data.dart';
 import 'package:yournonspotify/presentation/pages/recomendations_page.dart';
 import 'package:yournonspotify/presentation/providers/providers_presentation.dart';
+import 'package:yournonspotify/utils/toast.dart';
 
 class FloatingRecomendationsButton extends ConsumerStatefulWidget {
   const FloatingRecomendationsButton({super.key});
@@ -57,11 +58,10 @@ class _FloatingRecomendationsButtonState
             );
           }
         } else {
-          const snackBar = SnackBar(
-            content: Text('The list of favorites is empty, at least pick one'),
-            duration: Duration(seconds: 2),
+          Toast.showToast(
+            context: context,
+            message: 'The list of favorites is empty, at least pick one',
           );
-          ScaffoldMessenger.of(context).showSnackBar(snackBar);
         }
       },
       tooltip: _loading ? 'Searching recommendations' : 'Get Recommendations',

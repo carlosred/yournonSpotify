@@ -2,15 +2,19 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
+import 'package:audioplayers/audioplayers.dart';
 import 'package:yournonspotify/domain/models/item.dart';
 import 'package:yournonspotify/presentation/providers/providers_presentation.dart';
+
+import '../../utils/toast.dart';
 
 class ItemWidget extends ConsumerStatefulWidget {
   const ItemWidget({
     super.key,
+    required this.index,
     required this.recommended,
     required this.item,
     required this.width,
@@ -21,6 +25,7 @@ class ItemWidget extends ConsumerStatefulWidget {
   final double height;
   final Items item;
   final bool recommended;
+  final int index;
 
   @override
   ConsumerState<ItemWidget> createState() => _ItemWidgetState();
@@ -75,18 +80,27 @@ class _ItemWidgetState extends ConsumerState<ItemWidget>
             widget.item,
           );
 
-          ref.read(favoritesProvider.notifier).state = favorites;
+          ref.read(favoritesProvider.notifier).state = [...favorites];
         } else {
           var favorites = ref.read(favoritesProvider);
           favorites.removeWhere((element) => element == widget.item);
-          ref.read(favoritesProvider.notifier).state = favorites;
+          ref.read(favoritesProvider.notifier).state = [...favorites];
         }
       },
     );
   }
 
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    var previewUrl = widget.item.previewUrl;
+    var indexPlayer = ref.watch(indexPlayerProvider);
+    var player = ref.watch(playProvider);
+
     super.build(context);
     return AspectRatio(
       aspectRatio: 60 / 10,
@@ -163,9 +177,26 @@ class _ItemWidgetState extends ConsumerState<ItemWidget>
                               ),
                       )
                     : const SizedBox(),
-                const Icon(
-                  Icons.play_arrow,
-                  color: Colors.white,
+                GestureDetector(
+                  onTap: () {
+                    if (previewUrl != null) {
+                      player.play(
+                        UrlSource(previewUrl),
+                      );
+                      Toast.showToast(
+                        context: context,
+                        message: 'Now Playing: ${widget.item.name}',
+                      );
+                      ref.read(indexPlayerProvider.notifier).state =
+                          widget.index;
+                    }
+                  },
+                  child: previewUrl != null
+                      ? const Icon(
+                          Icons.play_arrow,
+                          color: Colors.white,
+                        )
+                      : const SizedBox(),
                 ),
                 const SizedBox(
                   width: 5.0,

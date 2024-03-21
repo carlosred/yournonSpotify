@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/models/item.dart';
 import '../widgets/item_widget.dart';
@@ -47,21 +48,26 @@ class _RecomendationsPageState extends ConsumerState<RecomendationsPage> {
                 child: Container(
                   width: width,
                   color: Colors.black87,
-                  child: const Row(
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      SizedBox(
+                      const SizedBox(
                         width: 5.0,
                       ),
-                      Icon(
-                        Icons.arrow_back,
-                        color: Colors.white,
-                        size: 30,
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: const Icon(
+                          Icons.arrow_back,
+                          color: Colors.white,
+                          size: 30,
+                        ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 15.0,
                       ),
-                      Text(
+                      const Text(
                         'Recommended songs',
                         style: TextStyle(
                           color: Colors.white,
@@ -83,6 +89,7 @@ class _RecomendationsPageState extends ConsumerState<RecomendationsPage> {
                     physics: const BouncingScrollPhysics(),
                     itemCount: widget.recommendations.length,
                     itemBuilder: (context, index) => ItemWidget(
+                      index: index,
                       recommended: true,
                       item: widget.recommendations[index],
                       height: height,

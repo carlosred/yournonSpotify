@@ -54,11 +54,12 @@ class _SearchBarPageState extends ConsumerState<SearchBarPage> {
     var height = MediaQuery.sizeOf(context).height;
 
     var searchbarProvider = ref.watch(searchBarControllerProvider);
-    ;
-
+    var favorites = ref.watch(favoritesProvider);
     return SafeArea(
       child: Scaffold(
-        floatingActionButton: const FloatingRecomendationsButton(),
+        floatingActionButton: favorites.isNotEmpty
+            ? const FloatingRecomendationsButton()
+            : const SizedBox(),
         extendBodyBehindAppBar: true,
         body: Container(
           width: width,
@@ -139,11 +140,12 @@ class _SearchBarPageState extends ConsumerState<SearchBarPage> {
                 child: searchbarProvider.when(
                   data: (data) {
                     if (data.isNotEmpty) {
+                      FocusScope.of(context).unfocus();
                       return ListView.separated(
-                        addAutomaticKeepAlives: true,
                         physics: const BouncingScrollPhysics(),
                         itemCount: data.length,
                         itemBuilder: (context, index) => ItemWidget(
+                          index: index,
                           recommended: false,
                           item: data[index],
                           height: height,
