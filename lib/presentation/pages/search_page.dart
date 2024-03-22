@@ -93,7 +93,6 @@ class _SearchBarPageState extends ConsumerState<SearchBarPage> {
                 child: searchbarProvider.when(
                   data: (data) {
                     if (data.isNotEmpty) {
-                      FocusScope.of(context).unfocus();
                       return ItemsListWidget(
                         items: data,
                         height: height,

@@ -8,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:yournonspotify/domain/models/item.dart';
 import 'package:yournonspotify/presentation/providers/providers_presentation.dart';
+import 'package:yournonspotify/utils/enum.dart';
 import 'package:yournonspotify/utils/styles.dart';
 
 import '../../utils/toast.dart';
@@ -51,7 +52,10 @@ class _ItemWidgetState extends ConsumerState<ItemWidget>
   void _checkType(String type) {
     switch (type) {
       case 'artist':
-        _imageUrl = widget.item.images!.first.url;
+        var image = widget.item.images;
+        _imageUrl = (image != null && image.isNotEmpty)
+            ? widget.item.images!.first.url
+            : '';
         _title = widget.item.name;
         _subtitle = widget.item.type;
         break;
@@ -166,7 +170,8 @@ class _ItemWidgetState extends ConsumerState<ItemWidget>
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                widget.recommended == false
+                widget.recommended == false &&
+                        widget.item.type == Types.track.name
                     ? GestureDetector(
                         onTap: _onFavoriteSelectedTap,
                         child: _selected
