@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yournonspotify/data/providers/providers_data.dart';
 import 'package:yournonspotify/presentation/controllers/login_controller.dart';
-import 'package:yournonspotify/presentation/pages/search_page.dart';
 import 'package:yournonspotify/utils/contants.dart';
 import 'package:yournonspotify/utils/enum.dart';
 
@@ -24,12 +23,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       if (next.hasValue && next.value != null) {
         ref.read(authProvider.notifier).state = next.value;
 
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const SearchBarPage(),
-          ),
-        );
+        Navigator.pushNamed(context, '/search');
       }
     });
 

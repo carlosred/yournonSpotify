@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:yournonspotify/presentation/controllers/login_controller.dart';
 import 'package:yournonspotify/presentation/controllers/search_bar_controller.dart';
 import 'package:yournonspotify/presentation/providers/providers_presentation.dart';
 import 'package:yournonspotify/presentation/widgets/floating_recommendations_button.dart';
 import 'package:yournonspotify/presentation/widgets/search_bar.dart';
 import 'package:yournonspotify/utils/enum.dart';
 import 'package:yournonspotify/utils/styles.dart';
-
-import '../widgets/back_spotify_button.dart';
 
 import '../widgets/items_list.dart';
 import '../widgets/loader.dart';
@@ -62,7 +61,17 @@ class _SearchBarPageState extends ConsumerState<SearchBarPage> {
                       const SizedBox(
                         width: 5.0,
                       ),
-                      const BackSpotifyButton(),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).pop();
+                          ref.read(loginControllerProvider.notifier).logout();
+                        },
+                        child: const Icon(
+                          Icons.arrow_back,
+                          color: Colors.white,
+                          size: 30,
+                        ),
+                      ),
                       const SizedBox(
                         width: 15.0,
                       ),
