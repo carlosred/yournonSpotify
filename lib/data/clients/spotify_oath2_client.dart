@@ -3,13 +3,14 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'package:yournonspotify/domain/auth/spotify_auth.dart';
+import 'package:yournonspotify/utils/contants.dart';
 
 class SpotifyOauth2Client {
   static const identifier = '2681df7762ea4000a25f9bcc5620b8ec';
   static const clientSecret = '3e45b121a2ed407cade501a7c2123f08';
   static const redirectUri = 'yournonspotify';
   Future<SpotifyAuth?> authenticate() async {
-    var url = Uri.https('accounts.spotify.com', '/authorize', {
+    var url = Uri.https(Contants.baseOauth2Url, Contants.authorizeUrl, {
       'response_type': 'code',
       'client_id': identifier,
       'client_secret': clientSecret,

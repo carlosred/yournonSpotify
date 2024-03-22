@@ -6,6 +6,7 @@ class Contants {
   static const baseOauth2Url = 'accounts.spotify.com';
   static const recommendatiosnUrl = '/v1/recommendations';
   static const searchUrl = '/v1/search';
+  static const authorizeUrl = '/authorize';
 
   //messages
   static const welcomeMessage = 'Welcome To YourNonSpotify App';

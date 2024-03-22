@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:yournonspotify/utils/contants.dart';
 
 class SpotifyClient {
   Future<Map<String, dynamic>?> searchTrack({
@@ -10,7 +11,7 @@ class SpotifyClient {
   }) async {
     Map<String, dynamic>? result;
     try {
-      var url = Uri.https('api.spotify.com', '/v1/search',
+      var url = Uri.https(Contants.baseApiUrl, Contants.searchUrl,
           {'q': track, 'type': (types.isNotEmpty ? types : 'track')});
 
       var response = await http.get(
@@ -39,7 +40,7 @@ class SpotifyClient {
   }) async {
     Map<String, dynamic>? result;
     try {
-      var url = Uri.https('api.spotify.com', '/v1/recommendations', {
+      var url = Uri.https(Contants.baseApiUrl, Contants.recommendatiosnUrl, {
         'seed_artists': seedArtist,
         'seed_tracks': seedTracks,
       });
