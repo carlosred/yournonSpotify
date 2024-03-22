@@ -39,7 +39,7 @@ flutter run -d android
 
 ### Usage
 
-1. Open the app on your device or emulator.
+1. Open the app on your device or emulator. 
 2. Log in with Oauth2 using spotify account.
 3. Search Artists,albums and tracks by name with a searchBar.
 4. Select a few favorite songs and get the recommendations.
@@ -47,6 +47,7 @@ flutter run -d android
 
 ### Example on Android
 
+https://drive.google.com/file/d/1qZzItV2GlhdRQkFqti4YHYlTo1z0ugss/view?usp=sharing
 
 
 
