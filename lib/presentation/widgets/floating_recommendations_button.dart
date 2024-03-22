@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:yournonspotify/core/routes/routes.dart';
 import 'package:yournonspotify/data/providers/providers_data.dart';
-import 'package:yournonspotify/presentation/pages/recomendations_page.dart';
 import 'package:yournonspotify/presentation/providers/providers_presentation.dart';
 import 'package:yournonspotify/utils/toast.dart';
 
@@ -49,14 +49,11 @@ class _FloatingRecomendationsButtonState
               _loading = false;
             });
 
-            Navigator.push(
+            Navigator.pushNamed(
               // ignore: use_build_context_synchronously
               context,
-              MaterialPageRoute(
-                builder: (context) => RecomendationsPage(
-                  recommendations: trackRecommended,
-                ),
-              ),
+              Routes.recommendationsRoute,
+              arguments: trackRecommended,
             );
           }
         } else {

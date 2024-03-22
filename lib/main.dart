@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:yournonspotify/presentation/pages/login_page.dart';
-import 'package:yournonspotify/presentation/pages/search_page.dart';
+import 'package:yournonspotify/core/routes/route_generator.dart';
 
 void main() {
   runApp(
@@ -23,10 +22,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       initialRoute: '/',
-      routes: {
-        '/': (context) => const LoginPage(),
-        '/search': (context) => const SearchBarPage(),
-      },
+      onGenerateRoute: RouteGenerator.generateRoute,
     );
   }
 }
