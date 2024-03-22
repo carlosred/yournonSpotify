@@ -52,10 +52,3 @@ flutter run -d android
 
 
 
-
-### Example on Web 
-
-
-
-
-https://github.com/carlosred/takeHome-Test/assets/22422477/329ff5cb-40b4-40c4-9d63-2d8a3d0f7133
