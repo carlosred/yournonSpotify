@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:yournonspotify/presentation/widgets/back_spotify_button.dart';
+import 'package:yournonspotify/presentation/widgets/items_list.dart';
+import 'package:yournonspotify/utils/contants.dart';
+import 'package:yournonspotify/utils/styles.dart';
 import '../../domain/models/item.dart';
-import '../widgets/item_widget.dart';
 
 class RecomendationsPage extends ConsumerStatefulWidget {
   const RecomendationsPage({
@@ -48,32 +50,19 @@ class _RecomendationsPageState extends ConsumerState<RecomendationsPage> {
                 child: Container(
                   width: width,
                   color: Colors.black87,
-                  child: Row(
+                  child: const Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      const SizedBox(
+                      SizedBox(
                         width: 5.0,
                       ),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: const Icon(
-                          Icons.arrow_back,
-                          color: Colors.white,
-                          size: 30,
-                        ),
-                      ),
-                      const SizedBox(
+                      BackSpotifyButton(),
+                      SizedBox(
                         width: 15.0,
                       ),
-                      const Text(
-                        'Recommended songs',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w500,
-                        ),
+                      Text(
+                        Contants.recommendationsMessage,
+                        style: Styles.tittleAppBarTextStyle,
                       )
                     ],
                   ),
@@ -83,22 +72,12 @@ class _RecomendationsPageState extends ConsumerState<RecomendationsPage> {
                 height: 1.0,
               ),
               Expanded(
-                  flex: 12,
-                  child: ListView.separated(
-                    addAutomaticKeepAlives: true,
-                    physics: const BouncingScrollPhysics(),
-                    itemCount: widget.recommendations.length,
-                    itemBuilder: (context, index) => ItemWidget(
-                      index: index,
-                      recommended: true,
-                      item: widget.recommendations[index],
-                      height: height,
-                      width: width,
-                    ),
-                    separatorBuilder: (context, index) => const SizedBox(
-                      height: 15.0,
-                    ),
-                  )),
+                flex: 12,
+                child: ItemsListWidget(
+                    height: height,
+                    items: widget.recommendations,
+                    width: width),
+              ),
             ],
           ),
         ),

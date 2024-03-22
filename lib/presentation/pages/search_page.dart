@@ -1,12 +1,16 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yournonspotify/presentation/controllers/search_bar_controller.dart';
 import 'package:yournonspotify/presentation/providers/providers_presentation.dart';
 import 'package:yournonspotify/presentation/widgets/floating_recommendations_button.dart';
+import 'package:yournonspotify/presentation/widgets/search_bar.dart';
+import 'package:yournonspotify/utils/enum.dart';
+import 'package:yournonspotify/utils/styles.dart';
 
-import '../widgets/item_widget.dart';
+import '../widgets/back_spotify_button.dart';
+
+import '../widgets/items_list.dart';
+import '../widgets/loader.dart';
 import '../widgets/type_widget.dart';
 
 class SearchBarPage extends ConsumerStatefulWidget {
@@ -17,26 +21,6 @@ class SearchBarPage extends ConsumerStatefulWidget {
 
 class _SearchBarPageState extends ConsumerState<SearchBarPage> {
   final _searchBarhController = TextEditingController();
-
-  final List<String> _types = ['track', 'album', 'artist'];
-
-  Timer? _debounceTimer;
-
-  void _onTypingFinished(String text) {
-    if (_debounceTimer != null) {
-      _debounceTimer!.cancel();
-    }
-
-    _debounceTimer = Timer(const Duration(milliseconds: 500), () {
-      if (text.isNotEmpty) {
-        var types = ref.read(typesProvider);
-        ref.read(searchBarControllerProvider.notifier).searchTrack(
-              track: _searchBarhController.text,
-              types: types,
-            );
-      }
-    });
-  }
 
   @override
   void initState() {
@@ -65,57 +49,26 @@ class _SearchBarPageState extends ConsumerState<SearchBarPage> {
           width: width,
           height: height,
           decoration: const BoxDecoration(
-            color: Colors.black87,
+            color: Styles.appColor,
           ),
           child: Column(
             children: [
               Flexible(
                 child: Container(
                   width: width,
-                  color: Colors.black54,
+                  color: Styles.appBarColor,
                   child: Row(
                     children: [
                       const SizedBox(
                         width: 5.0,
                       ),
-                      const Icon(
-                        Icons.arrow_back,
-                        color: Colors.white,
-                        size: 30,
-                      ),
+                      const BackSpotifyButton(),
                       const SizedBox(
                         width: 15.0,
                       ),
-                      Flexible(
-                        child: SizedBox(
-                          height: height * 0.07,
-                          child: Center(
-                            child: TextFormField(
-                              controller: _searchBarhController,
-                              onChanged: (value) => _onTypingFinished(value),
-                              onEditingComplete: () {
-                                FocusScope.of(context).unfocus();
-                                _onTypingFinished(_searchBarhController.text);
-                              },
-                              decoration: const InputDecoration.collapsed(
-                                border: InputBorder.none,
-                                fillColor: Colors.transparent,
-                                hintText: 'what do you want to listen?',
-                                hintStyle: TextStyle(
-                                  color: Colors.white54,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
+                      SearchSpotifyBar(
+                        searchBarController: _searchBarhController,
+                      )
                     ],
                   ),
                 ),
@@ -125,9 +78,9 @@ class _SearchBarPageState extends ConsumerState<SearchBarPage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    for (var i in _types)
+                    for (var i in Types.values)
                       TypeWidget(
-                        value: i,
+                        value: i.name,
                       ),
                   ],
                 ),
@@ -141,33 +94,21 @@ class _SearchBarPageState extends ConsumerState<SearchBarPage> {
                   data: (data) {
                     if (data.isNotEmpty) {
                       FocusScope.of(context).unfocus();
-                      return ListView.separated(
-                        physics: const BouncingScrollPhysics(),
-                        itemCount: data.length,
-                        itemBuilder: (context, index) => ItemWidget(
-                          index: index,
-                          recommended: false,
-                          item: data[index],
-                          height: height,
-                          width: width,
-                        ),
-                        separatorBuilder: (context, index) => const SizedBox(
-                          height: 15.0,
-                        ),
+                      return ItemsListWidget(
+                        items: data,
+                        height: height,
+                        width: width,
                       );
                     } else {
                       return const SizedBox();
                     }
                   },
                   error: (error, stack) => Center(
-                    child: Text('Error:$error'),
-                  ),
-                  loading: () => const Center(
-                    child: CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation(Colors.white),
-                      strokeWidth: 3,
+                    child: Text(
+                      'Error:${error.toString()}',
                     ),
                   ),
+                  loading: () => const Loader(),
                 ),
               ),
             ],

@@ -8,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:yournonspotify/domain/models/item.dart';
 import 'package:yournonspotify/presentation/providers/providers_presentation.dart';
+import 'package:yournonspotify/utils/styles.dart';
 
 import '../../utils/toast.dart';
 
@@ -98,7 +99,6 @@ class _ItemWidgetState extends ConsumerState<ItemWidget>
   @override
   Widget build(BuildContext context) {
     var previewUrl = widget.item.previewUrl;
-    var indexPlayer = ref.watch(indexPlayerProvider);
     var player = ref.watch(playProvider);
 
     super.build(context);
@@ -127,7 +127,10 @@ class _ItemWidgetState extends ConsumerState<ItemWidget>
               },
               imageUrl: _imageUrl,
               progressIndicatorBuilder: (context, url, downloadProgress) =>
-                  CircularProgressIndicator(value: downloadProgress.progress),
+                  CircularProgressIndicator(
+                value: downloadProgress.progress,
+                color: Styles.greenColor,
+              ),
               errorWidget: (context, url, error) => const Icon(Icons.error),
             ),
           ),

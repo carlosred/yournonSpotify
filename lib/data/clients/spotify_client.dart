@@ -1,9 +1,8 @@
 import 'dart:convert';
 
-import 'package:yournonspotify/data/clients/base_client.dart';
 import 'package:http/http.dart' as http;
 
-class SpotifyClient extends BaseClient {
+class SpotifyClient {
   Future<Map<String, dynamic>?> searchTrack({
     required String accessToken,
     required String track,
@@ -17,8 +16,8 @@ class SpotifyClient extends BaseClient {
       var response = await http.get(
         url,
         headers: {
+          'Authorization': 'Bearer $accessToken',
           'Content-Type': 'application/x-www-form-urlencoded',
-          'Authorization': 'Bearer $accessToken'
         },
       );
 

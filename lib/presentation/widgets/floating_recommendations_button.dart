@@ -5,6 +5,8 @@ import 'package:yournonspotify/presentation/pages/recomendations_page.dart';
 import 'package:yournonspotify/presentation/providers/providers_presentation.dart';
 import 'package:yournonspotify/utils/toast.dart';
 
+import 'loader.dart';
+
 class FloatingRecomendationsButton extends ConsumerStatefulWidget {
   const FloatingRecomendationsButton({super.key});
 
@@ -66,10 +68,7 @@ class _FloatingRecomendationsButtonState
       },
       tooltip: _loading ? 'Searching recommendations' : 'Get Recommendations',
       icon: _loading
-          ? const CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation(Colors.white),
-              strokeWidth: 3,
-            )
+          ? const Loader()
           : const Icon(
               Icons.favorite,
               color: Colors.white,

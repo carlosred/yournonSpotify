@@ -61,9 +61,6 @@ class SpotifyRepository {
       );
       result =
           List.from(response!['tracks']).map((e) => Items.fromJson(e)).toList();
-      print('recomendedd tracks: ' + result.length.toString());
-
-      for (var i in result) print(i.name);
     } catch (e) {
       result = [];
     }

@@ -5,6 +5,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yournonspotify/data/providers/providers_data.dart';
 import 'package:yournonspotify/presentation/controllers/login_controller.dart';
 import 'package:yournonspotify/presentation/pages/search_page.dart';
+import 'package:yournonspotify/utils/contants.dart';
+import 'package:yournonspotify/utils/enum.dart';
+
+import '../widgets/login_button.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
@@ -47,7 +51,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               imageFilter: ImageFilter.blur(sigmaY: 2, sigmaX: 2),
               child: Image.asset(
                 fit: BoxFit.cover,
-                'assets/login_background.jpg',
+                Contants.loginImageAsset,
               ),
             ),
           ),
@@ -56,7 +60,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Text(
-                  'Welcome To YourNonSpotify App',
+                  Contants.welcomeMessage,
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 25,
@@ -73,41 +77,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                         padding: const EdgeInsets.symmetric(
                           horizontal: 30.0,
                         ),
-                        child: AspectRatio(
-                          aspectRatio: 27 / 3,
-                          child: ElevatedButton(
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all(
-                                const Color(0xff1ED760),
-                              ),
-                            ),
-                            onPressed: () async {
-                              ref
-                                  .read(loginControllerProvider.notifier)
-                                  .authenticate();
-                            },
-                            child: const Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.done,
-                                  color: Colors.white,
-                                  size: 20,
-                                ),
-                                SizedBox(
-                                  width: 10.0,
-                                ),
-                                Text(
-                                  'Login Sucessfully',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
+                        child: LoginButton(
+                          ref: ref,
+                          status: LoginStatus.success,
                         ),
                       );
                     } else {
@@ -115,61 +87,23 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                         padding: const EdgeInsets.symmetric(
                           horizontal: 30.0,
                         ),
-                        child: AspectRatio(
-                          aspectRatio: 27 / 3,
-                          child: ElevatedButton(
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all(
-                                const Color(0xff1ED760),
-                              ),
-                            ),
-                            onPressed: () async {
-                              ref
-                                  .read(loginControllerProvider.notifier)
-                                  .authenticate();
-                            },
-                            child: const Text(
-                              'Log In',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ),
+                        child: LoginButton(
+                          ref: ref,
+                          status: LoginStatus.login,
                         ),
                       );
                     }
                   },
-                  error: (error, stack) => const Text('Error'),
+                  error: (error, stack) => Text(
+                    'Error:${error.toString()}',
+                  ),
                   loading: () => Padding(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 30.0,
                     ),
-                    child: AspectRatio(
-                      aspectRatio: 27 / 3,
-                      child: ElevatedButton(
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all(
-                            const Color(0xff1ED760),
-                          ),
-                        ),
-                        onPressed: () async {
-                          ref
-                              .read(loginControllerProvider.notifier)
-                              .authenticate();
-                        },
-                        child: const Center(
-                          child: SizedBox(
-                            height: 20,
-                            width: 20,
-                            child: CircularProgressIndicator(
-                              valueColor: AlwaysStoppedAnimation(Colors.white),
-                              strokeWidth: 3,
-                            ),
-                          ),
-                        ),
-                      ),
+                    child: LoginButton(
+                      ref: ref,
+                      status: LoginStatus.loading,
                     ),
                   ),
                 ),
